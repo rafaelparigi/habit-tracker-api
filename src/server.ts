@@ -1,21 +1,21 @@
 import express from "express";
 import cors from "cors";
-import { prisma } from "../prisma/prisma";
+
+import habitRoutes from "./routes/habitRoutes";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.listen(3001, () => {
-  console.log("Server running");
+
+app.get("/health", (_, res) => {
+  res.json({
+    status: "ok",
+  });
 });
 
-app.get("/habits", async (req, res) => {
-  const habits = await prisma.habit.findMany({
-    include: {
-      completions: true,
-    },
-  });
+app.use("/habits", habitRoutes);
 
-  res.json(habits);
+app.listen(3001, () => {
+  console.log("Server running on port 3001");
 });

@@ -1,20 +1,35 @@
 {
   "name": "habit-tracker-api",
-  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "prisma:validate": "prisma validate"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://rafaelparigi@github.com/rafaelparigi/habit-tracker-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/rafaelparigi/habit-tracker-api/issues"
+  },
+  "homepage": "https://github.com/rafaelparigi/habit-tracker-api#readme",
+  "dependencies": {
+    "@prisma/client": "^6.15.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "prisma": "^6.15.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
-    "@types/node": "^24.0.0",
-    "dotenv": "^17.4.2",
-    "prettier": "^3.9.6",
-    "prisma": "7.10.0"
-  },
-  "dependencies": {
-    "@prisma/adapter-better-sqlite3": "7.10.0",
-    "@prisma/client": "7.10.0",
-    "better-sqlite3": "^12.4.1"
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.20.3",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3"
   }
 }

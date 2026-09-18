@@ -1,0 +1,15 @@
+-- CreateTable
+CREATE TABLE "Habit" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "title" TEXT NOT NULL,
+    "description" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- CreateTable
+CREATE TABLE "HabitCompletion" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "completionDate" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "habitId" INTEGER NOT NULL,
+    CONSTRAINT "HabitCompletion_habitId_fkey" FOREIGN KEY ("habitId") REFERENCES "Habit" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);

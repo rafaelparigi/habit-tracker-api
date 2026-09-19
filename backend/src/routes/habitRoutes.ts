@@ -15,4 +15,6 @@ router.post("/:id/complete", habitController.completeHabit);
 
 router.get("/:id/history", habitController.getHabitHistory);
 
+router.get("/:id/stats", habitController.getHabitStats);
+
 export default router;

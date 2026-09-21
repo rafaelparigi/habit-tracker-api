@@ -4,7 +4,7 @@ import { habitService } from "../services/habitService";
 export const habitController = {
   getHabits: async (_req: Request, res: Response) => {
     try {
-      const habits = habitService.getAllHabits();
+      const habits = await habitService.getAllHabits();
 
       res.json(habits);
     } catch (error) {

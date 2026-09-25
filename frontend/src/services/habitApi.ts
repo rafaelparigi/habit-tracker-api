@@ -10,7 +10,6 @@ export interface Habit {
 export interface HabitStats {
   habitId: number;
   totalCompletions: number;
-  score: number;
   message: string;
 }
 

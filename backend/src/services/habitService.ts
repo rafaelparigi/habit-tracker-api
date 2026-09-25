@@ -69,20 +69,27 @@ export const habitService = {
 
     const totalCompletions = habit.completions.length;
 
-    const score = Math.min(totalCompletions * 10, 100);
+    let message = "";
 
-    let message = "Needs improvement";
-
-    if (score >= 80) {
-      message = "Excellent consistency";
-    } else if (score >= 50) {
-      message = "Good progress";
+    switch (true) {
+      case totalCompletions === 0:
+        message = "Make a start on your new habit";
+        break;
+      case totalCompletions < 33:
+        message = "Excellent progress!";
+        break;
+      case totalCompletions < 66:
+        message =
+          "Well done! You are more than halfway into making your habit automatic! Keep going!";
+        break;
+      default:
+        message =
+          "Congratulations! Your new habit is now automatic. You can keep tracking it, and also create new habits!";
     }
 
     return {
       habitId: habit.id,
       totalCompletions,
-      score,
       message,
     };
   },

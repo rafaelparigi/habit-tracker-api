@@ -8,10 +8,12 @@ import {
   getHabitStats,
 } from "../services/habitApi";
 import type { Habit, HabitStats } from "../services/habitApi";
+import ProgressRing from "../components/ProgressRing";
 
 function Dashboard() {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [stats, setStats] = useState<Record<number, HabitStats>>({});
+  const [visibleStats, setVisibleStats] = useState<Set<number>>(new Set());
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(true);
@@ -61,19 +63,37 @@ function Dashboard() {
   const handleComplete = async (id: number) => {
     try {
       await completeHabit(id);
-      await handleShowStats(id);
+      await loadStats(id);
+      setVisibleStats((prev) => new Set(prev).add(id));
     } catch {
       setError("Failed to complete habit");
     }
   };
 
-  const handleShowStats = async (id: number) => {
+  const loadStats = async (id: number) => {
     try {
       const response = await getHabitStats(id);
       setStats((prev) => ({ ...prev, [id]: response.data }));
     } catch {
       setError("Failed to load habit stats");
     }
+  };
+
+  const handleToggleStats = async (id: number) => {
+    if (visibleStats.has(id)) {
+      setVisibleStats((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+      return;
+    }
+
+    if (!stats[id]) {
+      await loadStats(id);
+    }
+
+    setVisibleStats((prev) => new Set(prev).add(id));
   };
 
   return (
@@ -110,19 +130,28 @@ function Dashboard() {
               <div>
                 <strong>{habit.title}</strong>
                 {habit.description && <p>{habit.description}</p>}
-                {stats[habit.id] && (
+                {visibleStats.has(habit.id) && stats[habit.id] && (
                   <p className="habit-stats">
-                    Completions: {stats[habit.id].totalCompletions} | Score:{" "}
-                    {stats[habit.id].score} - {stats[habit.id].message}
+                    Completions: {stats[habit.id].totalCompletions} / 66 -{" "}
+                    {stats[habit.id].message}
                   </p>
                 )}
               </div>
-              <div className="habit-actions">
-                <button onClick={() => handleComplete(habit.id)}>
-                  Complete
-                </button>
-                <button onClick={() => handleShowStats(habit.id)}>Stats</button>
-                <button onClick={() => handleDelete(habit.id)}>Delete</button>
+              <div className="habit-side">
+                {visibleStats.has(habit.id) && stats[habit.id] && (
+                  <ProgressRing
+                    completions={stats[habit.id].totalCompletions}
+                  />
+                )}
+                <div className="habit-actions">
+                  <button onClick={() => handleComplete(habit.id)}>
+                    Complete
+                  </button>
+                  <button onClick={() => handleToggleStats(habit.id)}>
+                    {visibleStats.has(habit.id) ? "Hide Stats" : "Show Stats"}
+                  </button>
+                  <button onClick={() => handleDelete(habit.id)}>Delete</button>
+                </div>
               </div>
             </li>
           ))}
